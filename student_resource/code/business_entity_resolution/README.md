@@ -131,6 +131,7 @@ Expected result: `PASS — no blocking issues found.`
 | `src/person1_charblock_test.py` | Experiment: TF-IDF char n-gram + sklearn NearestNeighbors |
 | `src/fast_validate_candidates.py` | Streaming format validator for candidate_pairs.tsv |
 | `src/create_matching_template.py` | One-shot utility to create blank matching_results.tsv |
+| `src/person2_matcher.py` | Pair features, CatBoost matching, validation thresholding, and precision-first output |
 
 ---
 
@@ -186,3 +187,33 @@ After cloning and placing the dataset, run Steps 1–4 above to regenerate:
 **Recall context:** the blocking stage captures 47.68 % of true matches.
 Your matching model works on those candidates. Person 3's semantic layer
 will add more candidates on top — coordinate with them before final submission.
+
+### Person 2 — matching and decision engine
+
+After Person 1 has generated `output/candidate_pairs.tsv`, run:
+
+```bash
+python code/business_entity_resolution/src/person2_matcher.py
+```
+
+The matcher rebuilds training candidates with Person 1's blocking rules,
+labels them from `train_ground_truth.tsv`, and trains a reproducible CatBoost
+pair classifier. Features include RapidFuzz name/address similarities,
+character n-gram cosine scores, token overlap, numeric-address overlap,
+country agreement, missingness, and name/address interaction terms. A stable
+entity-level validation fold selects the macro F0.5 threshold, then the model
+scores the exact candidate handoff from `output/candidate_pairs.tsv`.
+
+The decision layer is precision-first: it does not force a nearest-neighbour
+match, leaves uncertain candidates unmatched, deduplicates IDs, and writes
+every test Source-1 entity exactly once. For a smoke-test baseline, use
+`--deterministic`; the CatBoost model is the intended submission path.
+
+Validate the generated files with:
+
+```bash
+python utils/validate_submission.py \
+  --matching output/matching_results.tsv \
+  --candidate output/candidate_pairs.tsv \
+  --test-dir dataset/test
+```

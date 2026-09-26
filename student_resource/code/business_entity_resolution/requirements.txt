@@ -22,3 +22,6 @@ scipy==1.18.1
 cloudpickle==3.1.2
 joblib==1.6.0
 threadpoolctl==3.7.0
+
+# Person 2 — pairwise matching model
+catboost==1.2.8
