@@ -1,0 +1,40 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Data files — too large for GitHub (use cloud storage or DVC)
+student_resource/dataset/
+student_resource/artifacts/
+student_resource/work/
+student_resource/output/
+
+# DuckDB temp files
+*.duckdb
+*.duckdb.wal
+*.tmp
+
+# SQLite
+*.sqlite
+*.sqlite3
+
+# Parquet (generated artifacts)
+*.parquet
+
+# TSV data outputs
+student_resource/output/*.tsv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
