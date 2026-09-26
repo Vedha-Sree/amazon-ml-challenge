@@ -38,3 +38,8 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# CatBoost training logs
+catboost_info/
+
+dataset/
