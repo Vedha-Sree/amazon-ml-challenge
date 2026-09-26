@@ -12,15 +12,37 @@ matching model (Person 2).
 
 ---
 
-## Environment
-
-Python 3.9 or later. Install dependencies from the project root:
+## Setup After Cloning
 
 ```bash
-pip install -r code/business_entity_resolution/requirements.txt
+git clone https://github.com/Vedha-Sree/amazon-ml-challenge.git
+cd amazon-ml-challenge
+git checkout person1
 ```
 
-All commands below are run from the **`student_resource/`** directory.
+**The dataset is NOT in this repo** (files are too large for GitHub).
+Get the `student_resource/dataset/` folder from Person 1 and place it here:
+
+```
+amazon-ml-challenge/
+└── student_resource/
+    └── dataset/          ← place the dataset folder here
+        ├── train/
+│       │   ├── train_source1.tsv
+│       │   ├── train_source2.tsv
+│       │   ├── train_source3.tsv
+│       │   └── train_ground_truth.tsv
+        └── test/
+            ├── test_source1.tsv
+            ├── test_source2.tsv
+            └── test_source3.tsv
+```
+
+Then install dependencies:
+
+```bash
+pip install -r student_resource/code/business_entity_resolution/requirements.txt
+```
 
 ---
 
@@ -151,3 +173,16 @@ generating explosive pair counts.
 | `output/candidate_pairs.tsv` | One row per S1 test entity; `candidate_entity_ids` = comma-separated S2/S3 IDs |
 | `work/person1/test_source{1,2,3}.parquet` | Normalised test parquets with all 6 feature columns |
 | `work/person1/train_source{1,2,3}.parquet` | Normalised train parquets for feature engineering |
+
+---
+
+## For Person 2 (Matching Model)
+
+After cloning and placing the dataset, run Steps 1–4 above to regenerate:
+- `work/person1/*.parquet` — normalised features for your model
+- `output/candidate_pairs.tsv` — the candidate set to run inference over
+- `output/matching_results.tsv` — blank template for your predictions
+
+**Recall context:** the blocking stage captures 47.68 % of true matches.
+Your matching model works on those candidates. Person 3's semantic layer
+will add more candidates on top — coordinate with them before final submission.
